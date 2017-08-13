@@ -1,18 +1,25 @@
+from configs.development import SimpleConfig
 from src.data.preprocessor import Preprocessor
+
+_config = SimpleConfig
 
 
 if __name__ == '__main__':
-    raw_train_data_path = './raw_data/train-volume.tif'
-    raw_label_data_path = './raw_data/train-labels.tif'
-    raw_test_data_path = './raw_data/test-volume.tif'
-    preprocessed_train_path = './preprocessed_data/train_data.npy'
-    preprocessed_label_path = './preprocessed_data/label_data.npy'
-    preprocessed_test_path = './preprocessed_data/test_data.npy'
 
-    preprocessor = Preprocessor(raw_train_data_path, raw_label_data_path, raw_test_data_path, aug_size=3)
+    preprocessor = Preprocessor(
+        _config.RAW_TRAIN_IMAGE_PATH,
+        _config.RAW_TRAIN_LABEL_IMAGE_PATH,
+        _config.RAW_TEST_IMAGE_PATH,
+        _config.AUG_SIZE,
+        _config.AUG_CONFIGS
+    )
 
     print('Preprocessing data...')
     preprocessor.do_preprocess()
     print('Finish preprocess.')
 
-    preprocessor.save(preprocessed_train_path, preprocessed_label_path, preprocessed_test_path)
+    preprocessor.save(
+        _config.PROCESSED_TRAIN_IMAGE_PATH,
+        _config.PROCESSED_TRAIN_LABEL_PATH,
+        _config.PROCESSED_TEST_PATH
+    )

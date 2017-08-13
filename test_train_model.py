@@ -1,17 +1,13 @@
 import numpy as np
-import keras.backend as K
 from src.models.unet import Unet
+from configs.development import SimpleConfig
+
+_config = SimpleConfig
 
 
 if __name__ == '__main__':
-
-    # K.set_image_data_format('channels_first')
-
-    train_data = np.load('./preprocessed_data/train_data.npy')
-    label_data = np.load('./preprocessed_data/label_data.npy')
-
-    train_data = train_data.reshape(120, 512, 512, 1)
-    label_data = label_data.reshape(120, 512, 512, 1)
+    train_data = np.load(_config.PROCESSED_TRAIN_IMAGE_PATH)
+    label_data = np.load(_config.PROCESSED_TRAIN_LABEL_PATH)
 
     unet = Unet(512, 512)
     unet.train(train_data, label_data)
