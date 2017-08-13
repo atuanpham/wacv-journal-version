@@ -1,4 +1,4 @@
-from src.preprocessor import Preprocessor
+from src.data.preprocessor import Preprocessor
 
 
 if __name__ == '__main__':

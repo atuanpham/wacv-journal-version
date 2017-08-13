@@ -1,6 +1,6 @@
 import numpy as np
 import keras.backend as K
-from src.model import Unet
+from src.models.unet import Unet
 
 
 if __name__ == '__main__':
