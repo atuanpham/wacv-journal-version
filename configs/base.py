@@ -4,10 +4,10 @@ import os
 class BaseConfig(object):
 
     # Project root path
-    ROOT_DIR = os.path.join(
+    ROOT_DIR = os.path.abspath(os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
         '..'
-    )
+    ))
 
     # Configure data path
     DATA_DIR = os.path.join(ROOT_DIR, 'data')
