@@ -15,9 +15,6 @@ class Augmentation(object):
         label_gen = ImageDataGenerator(**self.data_gen_args)
 
         for i in range(len(self.train_data)):
-            # train_temp = self.train_data[i].reshape(1, *self.train_data[i].shape, 1)
-            # label_temp = self.label_data[i].reshape(1, *self.label_data[i].shape, 1)
-
             train_temp = self.train_data[i].reshape(1, *self.train_data[i].shape)
             label_temp = self.label_data[i].reshape(1, *self.label_data[i].shape)
 
@@ -34,7 +31,6 @@ class Augmentation(object):
 
         print('Appending additional train volume.')
         for i, aug_train in enumerate(train_flow):
-            # aug_train = aug_train.reshape(*aug_train.shape[1:])  # reshape from (1, width, height, 1) to (width, height, 1)
             self.train_data = np.append(self.train_data, aug_train, axis=0)
 
             if i + 1 >= self.aug_size:
@@ -42,7 +38,6 @@ class Augmentation(object):
 
         print('Appending additional train labels.')
         for i, aug_label in enumerate(label_flow):
-            # aug_label = aug_label.reshape(*aug_label.shape[1:])  # reshape from to (width, height, 1)
             self.label_data = np.append(self.label_data, aug_label, axis=0)
 
             if i + 1 >= self.aug_size:

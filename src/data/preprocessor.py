@@ -35,10 +35,6 @@ class Preprocessor(object):
         self.preprocessed_train_data = augmentation.train_data
         self.preprocessed_label_data = augmentation.label_data
 
-        # Reshape data
-        # self.preprocessed_train_data = aug_train.reshape(aug_train.shape[0], 1, *aug_train.shape[1:])
-        # self.preprocessed_label_data = aug_label.reshape(aug_label.shape[0], 1, *aug_label.shape[1:])
-
         # Reshape test data also
         self.preprocessed_test_data = self.transform_raw_data(raw_test_data)
 
