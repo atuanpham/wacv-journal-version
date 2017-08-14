@@ -1,8 +1,9 @@
 from keras.models import Model
 from keras.optimizers import Adam
-from keras.layers import Input, Conv2D, MaxPooling2D, Dropout, UpSampling2D, Conv2DTranspose
-from keras.layers.merge import Concatenate, concatenate
+from keras.layers import Input, Conv2D, MaxPooling2D, Conv2DTranspose
+from keras.layers.merge import concatenate
 from keras.callbacks import ModelCheckpoint 
+
 
 class Unet(object):
 
@@ -116,4 +117,3 @@ class Unet(object):
         print('Fitting model...')
         model.fit(train_data, label_data, batch_size=1, epochs=10,
                   verbose=1, shuffle=True, callbacks=[model_checkpoint])
-

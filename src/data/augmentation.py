@@ -4,11 +4,11 @@ from keras.preprocessing.image import ImageDataGenerator
 
 class Augmentation(object):
 
-    def __init__(self, train_data, label_data, aug_size=32, aug_configs=dict()):
+    def __init__(self, train_data, label_data, aug_size=32, aug_configs=None):
         self.train_data = train_data
         self.label_data = label_data
         self.aug_size = aug_size
-        self.data_gen_args = aug_configs
+        self.data_gen_args = aug_configs if aug_configs else dict()
 
     def augment(self, batch_size=1):
         train_gen = ImageDataGenerator(**self.data_gen_args)
@@ -42,4 +42,3 @@ class Augmentation(object):
 
             if i + 1 >= self.aug_size:
                 break
-

@@ -1,5 +1,4 @@
 from skimage import io
-import numpy as np
 
 
 class TiffImage(object):
@@ -7,7 +6,6 @@ class TiffImage(object):
     def __init__(self, path):
         self.path = path
 
-    def convertToNumpyArray(self):
+    def convert_to_numpy_array(self):
         im = io.imread(self.path)
         return im
-
