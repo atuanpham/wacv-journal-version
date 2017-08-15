@@ -1,4 +1,4 @@
-name: test-journal
+name: journal
 dependencies:
     - setuptools
     - numpy
