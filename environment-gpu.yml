@@ -1,0 +1,19 @@
+name: journal-gpu
+dependencies:
+    - setuptools
+    - numpy
+    - scipy
+    - scikit-image
+    - matplotlib
+    - ipython
+    - jupyter
+    - pandas
+    - sympy
+    - nose
+    - pyyaml
+    - tensorflow-gpu
+    - click
+    - pip
+    - pip:
+        - keras
+        - nipype
