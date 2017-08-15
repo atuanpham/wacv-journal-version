@@ -15,5 +15,5 @@ class SimpleConfig(BaseConfig):
     PROCESSED_TEST_PATH = os.path.join(BaseConfig.PROCESSED_DATA_DIR, 'test.npy')
 
     # Augmentation config
-    AUG_SIZE = 3
+    AUG_SIZE = 30
 
