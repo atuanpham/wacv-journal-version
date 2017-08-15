@@ -11,3 +11,4 @@ pyyaml
 tensorflow
 keras
 click
+nipype
