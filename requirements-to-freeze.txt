@@ -13,3 +13,4 @@ tensorflow
 keras
 click
 nipype
+h5py
