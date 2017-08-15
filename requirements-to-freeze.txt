@@ -1,6 +1,7 @@
 setuptools
 numpy
 scipy
+scikit-image
 matplotlib
 ipython
 jupyter

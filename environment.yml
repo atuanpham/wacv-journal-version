@@ -1,0 +1,19 @@
+name: test-journal
+dependencies:
+    - setuptools
+    - numpy
+    - scipy
+    - scikit-image
+    - matplotlib
+    - ipython
+    - jupyter
+    - pandas
+    - sympy
+    - nose
+    - pyyaml
+    - tensorflow
+    - click
+    - pip
+    - pip:
+        - keras
+        - nipype
