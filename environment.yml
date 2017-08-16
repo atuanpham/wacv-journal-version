@@ -4,6 +4,7 @@ dependencies:
     - numpy
     - scipy
     - scikit-image
+    - scikit-learn
     - matplotlib
     - ipython
     - jupyter
@@ -18,3 +19,4 @@ dependencies:
     - pip:
         - keras
         - nipype
+        - nilearn

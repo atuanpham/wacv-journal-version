@@ -14,6 +14,12 @@ class SimpleConfig(BaseConfig):
     PROCESSED_TRAIN_LABEL_PATH = os.path.join(BaseConfig.PROCESSED_DATA_DIR, 'train-labels.npy')
     PROCESSED_TEST_PATH = os.path.join(BaseConfig.PROCESSED_DATA_DIR, 'test.npy')
 
+    # Results path
+    WEIGHTS_PATH = os.path.join(BaseConfig.RESULTS_PATH, 'weights')
+
     # Augmentation config
     AUG_SIZE = 30
+
+    # Train configs
+    EPOCHS = 1
 

@@ -44,9 +44,10 @@ def process_data(train_image_path, train_label_path, test_image_path,
               type=click.Path(), default=_config.PROCESSED_TRAIN_IMAGE_PATH)
 @click.option('--processed-train-label-path', 'processed_train_label_path',
               type=click.Path(), default=_config.PROCESSED_TRAIN_LABEL_PATH)
+@click.option('--weights-path', 'weights_path', type=click.Path(), default=_config.WEIGHTS_PATH)
 @click.option('--image-width', 'image_width', type=click.INT)
 @click.option('--image-height', 'image_height', type=click.INT)
-def train(processed_train_path, processed_train_label_path, image_width, image_height):
+def train(processed_train_path, processed_train_label_path, weights_path,image_width, image_height):
 
     try:
         train_data = np.load(processed_train_path)
@@ -56,7 +57,7 @@ def train(processed_train_path, processed_train_label_path, image_width, image_h
         return 1
 
     unet = Unet(image_width, image_height)
-    unet.train(train_data, train_label_data)
+    unet.train(train_data, train_label_data, weights_path, _config.EPOCHS)
 
 
 # Add commands

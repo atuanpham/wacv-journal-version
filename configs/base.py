@@ -14,6 +14,9 @@ class BaseConfig(object):
     RAW_DATA_DIR = os.path.join(DATA_DIR, 'raw')
     PROCESSED_DATA_DIR = os.path.join(DATA_DIR, 'processed')
 
+    # Results path
+    RESULTS_PATH = os.path.join(ROOT_DIR, 'results')
+
     # Configurations for augmentation task
     AUG_SIZE = 32
     AUG_CONFIGS = dict(
@@ -25,8 +28,4 @@ class BaseConfig(object):
         horizontal_flip=True,
         fill_mode='nearest'
     )
-
-    # Trained-models results
-    MODELS_DIR = os.path.join(ROOT_DIR, 'models')
-    WEIGHTS_DIR = os.path.join(MODELS_DIR, 'weights')
 
