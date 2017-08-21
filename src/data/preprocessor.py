@@ -1,43 +1,73 @@
+import os
+import errno
 import numpy as np
-from ..utils.tiff_image import TiffImage
-from .augmentation import Augmentation
 from ..utils import misc
+from ..utils.neuro import NiftiImage
 
 
 class Preprocessor(object):
+    """
+    :type raw_train_data_dir: str
+    :type raw_test_data_dir: str
+    :type processed_train_data_dir: str
+    :type processed_test_data_dir: str
+    :type postfix_data_file: str
+    :type postfix_mask_data_file: str
+    :type train_patients: list[str]
+    :type test_patients: list[str]
+    """
 
-    def __init__(self, raw_train_data_path, raw_label_data_path, raw_test_data_path, aug_size=32, aug_configs=None):
-        self.raw_train_data_path = raw_train_data_path
-        self.raw_label_data_path = raw_label_data_path
-        self.raw_test_data_path = raw_test_data_path
-        self.preprocessed_train_data = None
-        self.preprocessed_label_data = None
-        self.preprocessed_test_data = None
-        self.aug_size = aug_size
-        self.aug_configs = aug_configs if aug_configs else dict()
+    def __init__(self, raw_train_data_dir, raw_test_data_dir,
+                 processed_train_data_dir, processed_test_data_dir,
+                 postfix_data_file, postfix_mask_data_file):
+
+        self.raw_train_data_dir = raw_train_data_dir
+        self.raw_test_data_dir = raw_test_data_dir
+        self.processed_train_data_dir = processed_train_data_dir
+        self.processed_test_data_dir = processed_test_data_dir
+        self.postfix_data_file = postfix_data_file
+        self.postfix_mask_data_file = postfix_mask_data_file
+        self.train_patients = []
+        self.test_patients = []
+
 
     def do_preprocess(self):
-        # Read Tiff images and convert to numpy arrays
-        raw_train_data = TiffImage(self.raw_train_data_path).convert_to_numpy_array()
-        raw_label_data = TiffImage(self.raw_label_data_path).convert_to_numpy_array()
-        raw_test_data = TiffImage(self.raw_test_data_path).convert_to_numpy_array()
+        self.train_patients = misc.get_direct_directories(self.raw_train_data_dir)
+        self.test_patients = misc.get_direct_directories(self.raw_test_data_dir)
 
-        # Transform raw data from (samples, width, height) to (samples, width, height, channels)
-        raw_train_data = misc.transform_raw_data(raw_train_data)
-        raw_label_data = misc.transform_raw_data(raw_label_data)
+        for patient in self.train_patients:  # type: str
+            self._process_patient(patient, self.raw_train_data_dir, self.processed_train_data_dir)
 
-        # Augment train data & label data
-        augmentation = Augmentation(raw_train_data, raw_label_data, self.aug_size, self.aug_configs)
-        augmentation.augment()
+        for patient in self.test_patients:  #type: str
+            self._process_patient(patient, self.raw_test_data_dir, self.processed_test_data_dir)
 
-        self.preprocessed_train_data = augmentation.train_data
-        self.preprocessed_label_data = augmentation.label_data
 
-        # Reshape test data also
-        self.preprocessed_test_data = misc.transform_raw_data(raw_test_data)
+    def _process_patient(self, patient, data_dir, processed_data_dir):
+        """Read Nifti image and save as a numpy array
+        
+        :type patient: str
+        :type data_dir: str
+        :type processed_data_dir: str
+        """
 
-    def save(self, preprocessed_train_path, preprocessed_label_path, preprocessed_test_path):
-        np.save(preprocessed_train_path, self.preprocessed_train_data)
-        np.save(preprocessed_label_path, self.preprocessed_label_data)
-        np.save(preprocessed_test_path, self.preprocessed_test_data)
-        print('Persisted preprocessed data.')
+        data_file = '{}{}'.format(patient, self.postfix_data_file)
+        mask_data_file = '{}{}'.format(patient, self.postfix_mask_data_file)
+        data_file_path = os.path.join(data_dir, patient, data_file)
+        mask_data_file_path = os.path.join(data_dir, patient, mask_data_file)
+
+        data = NiftiImage(data_file_path).convert_to_numpy_array()
+        mask_data = NiftiImage(mask_data_file_path).convert_to_numpy_array()
+
+        processed_data_file_name = '{}_data.npy'.format(patient)
+        processed_mask_data_file_name = '{}_mask.npy'.format(patient)
+
+        # Create directory containing processed data if is doesn't exist
+        try:
+            os.makedirs(os.path.join(processed_data_dir, patient))
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
+
+        np.save(os.path.join(processed_data_dir, patient, processed_data_file_name), data)
+        np.save(os.path.join(processed_data_dir, patient, processed_mask_data_file_name), mask_data)
+

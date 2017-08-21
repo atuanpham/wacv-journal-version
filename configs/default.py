@@ -1,4 +1,4 @@
-from .base import BaseConfig
+from src.config import BaseConfig
 
 
 class DefaultConfig(BaseConfig):
