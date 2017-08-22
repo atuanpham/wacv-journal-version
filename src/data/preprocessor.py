@@ -15,20 +15,29 @@ class Preprocessor(object):
     :type postfix_mask_data_file: str
     :type train_patients: list[str]
     :type test_patients: list[str]
+    :type transpose: list[int]
+    :type diminish: bool
     """
 
     def __init__(self, raw_train_data_dir, raw_test_data_dir,
                  processed_train_data_dir, processed_test_data_dir,
-                 postfix_data_file, postfix_mask_data_file):
+                 postfix_data_file, postfix_mask_data_file,
+                 transpose=None, diminish=True):
 
         self.raw_train_data_dir = raw_train_data_dir
         self.raw_test_data_dir = raw_test_data_dir
+
         self.processed_train_data_dir = processed_train_data_dir
         self.processed_test_data_dir = processed_test_data_dir
+
         self.postfix_data_file = postfix_data_file
         self.postfix_mask_data_file = postfix_mask_data_file
+
         self.train_patients = []
         self.test_patients = []
+
+        self.transpose = transpose
+        self.diminish = diminish
 
 
     def do_preprocess(self):
