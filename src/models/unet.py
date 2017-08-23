@@ -72,10 +72,10 @@ class Unet(object):
 
         return model
 
-    def train(self, train_data, label_data, weights_path, epochs=10):
+    def train(self, train_data, mask_data, weights_path, epochs=10):
         model = self._get_model()
         model_checkpoint = ModelCheckpoint(weights_path, monitor='loss', verbose=1, save_best_only=True)
 
         print('Fitting model...')
-        model.fit(train_data, label_data, batch_size=1, epochs=epochs,
+        model.fit(train_data, mask_data, batch_size=1, epochs=epochs, validation_split=0.2,
                   verbose=1, shuffle=True, callbacks=[model_checkpoint])

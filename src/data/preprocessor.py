@@ -63,8 +63,8 @@ class Preprocessor(object):
         mask_data = NiftiImage(mask_data_file_path).convert_to_numpy_array()
 
         if self.transpose is not None:
-            data = np.transpose(data, transpose)
-            mask_data = np.transpose(mask_data, transpose)
+            data = np.transpose(data, self.transpose)
+            mask_data = np.transpose(mask_data, self.transpose)
 
         processed_data_file_name = '{}_data.npy'.format(patient)
         processed_mask_data_file_name = '{}_mask.npy'.format(patient)
