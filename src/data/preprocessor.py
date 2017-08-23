@@ -16,13 +16,11 @@ class Preprocessor(object):
     :type train_patients: list[str]
     :type test_patients: list[str]
     :type transpose: list[int]
-    :type diminish: bool
     """
 
     def __init__(self, raw_train_data_dir, raw_test_data_dir,
                  processed_train_data_dir, processed_test_data_dir,
-                 postfix_data_file, postfix_mask_data_file,
-                 transpose=None, diminish=True):
+                 postfix_data_file, postfix_mask_data_file, transpose=None):
 
         self.raw_train_data_dir = raw_train_data_dir
         self.raw_test_data_dir = raw_test_data_dir
@@ -37,8 +35,6 @@ class Preprocessor(object):
         self.test_patients = []
 
         self.transpose = transpose
-        self.diminish = diminish
-
 
     def do_preprocess(self):
         self.train_patients = misc.get_direct_directories(self.raw_train_data_dir)
@@ -49,7 +45,6 @@ class Preprocessor(object):
 
         for patient in self.test_patients:  #type: str
             self._process_patient(patient, self.raw_test_data_dir, self.processed_test_data_dir)
-
 
     def _process_patient(self, patient, data_dir, processed_data_dir):
         """Read Nifti image and save as a numpy array
@@ -66,6 +61,10 @@ class Preprocessor(object):
 
         data = NiftiImage(data_file_path).convert_to_numpy_array()
         mask_data = NiftiImage(mask_data_file_path).convert_to_numpy_array()
+
+        if self.transpose is not None:
+            data = np.transpose(data, transpose)
+            mask_data = np.transpose(mask_data, transpose)
 
         processed_data_file_name = '{}_data.npy'.format(patient)
         processed_mask_data_file_name = '{}_mask.npy'.format(patient)
