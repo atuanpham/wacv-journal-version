@@ -17,7 +17,7 @@ class IBSRConfig(BaseConfig):
     POSTFIX_MASK_DATA_FILE = '_segTRI_fill_ana.nii.gz'
 
     # Results path
-    WEIGHTS_PATH = os.path.join(BaseConfig.RESULTS_PATH, 'weights')
+    WEIGHTS_PATH = os.path.join(BaseConfig.RESULTS_PATH, 'weights', 'unet.hdf5')
 
     # Augmentation config
     # AUG_SIZE = 30
