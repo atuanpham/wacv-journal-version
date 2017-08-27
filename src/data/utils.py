@@ -84,3 +84,30 @@ class DataUtils(object):
         else:
             self.test_mask = np.append(self.test_mask, mask, axis=0)
 
+
+class DataLabel(object):
+
+    @staticmethod
+    def process_mask_for_train(mask, number_of_classes):
+        output_shape = (mask.shape[0], mask.shape[1], mask.shape[2], number_of_classes)
+        extracted_mask = np.zeros(output_shape)
+
+        for index, slice_ in enumerate(mask):
+            for class_index in range(number_of_classes):
+                class_label = class_index + 1
+                extracted_mask[index, :, :, class_index][mask[index, :, :, 0] == class_label] = 1
+
+        return extracted_mask
+
+    @staticmethod
+    def merge_mask(extracted_mask):
+        output_shape = (extracted_mask.shape[0], extracted_mask.shape[1], extracted_mask.shape[2], 1)
+        mask = np.zeros(output_shape)
+
+        for index, slice_ in enumerate(extracted_mask):
+            for class_index in range(extracted_mask.shape[3]):
+                label = class_index + 1
+                mask[index, :, :, 0][extracted_mask[index, :, :, class_index] == 1] = label
+
+        return mask
+
