@@ -88,7 +88,7 @@ class DataUtils(object):
 class DataLabel(object):
 
     @staticmethod
-    def process_mask_for_train(mask, number_of_classes):
+    def extract_mask_labels(mask, number_of_classes):
         output_shape = (mask.shape[0], mask.shape[1], mask.shape[2], number_of_classes)
         extracted_mask = np.zeros(output_shape)
 
@@ -100,7 +100,7 @@ class DataLabel(object):
         return extracted_mask
 
     @staticmethod
-    def merge_mask(extracted_mask):
+    def merge_mask_labels(extracted_mask):
         output_shape = (extracted_mask.shape[0], extracted_mask.shape[1], extracted_mask.shape[2], 1)
         mask = np.zeros(output_shape)
 

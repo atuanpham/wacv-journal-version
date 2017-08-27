@@ -1,6 +1,7 @@
 import os
 import errno
 import numpy as np
+from .utils import DataLabel
 from ..utils import misc
 from ..utils.neuro import NiftiImage
 
@@ -65,6 +66,8 @@ class Preprocessor(object):
         if self.transpose is not None:
             data = np.transpose(data, self.transpose)
             mask_data = np.transpose(mask_data, self.transpose)
+
+        mask_data = DataLabel.extract_mask_labels(mask_data, len(np.unique(mask_data)) - 1)
 
         processed_data_file_name = '{}_data.npy'.format(patient)
         processed_mask_data_file_name = '{}_mask.npy'.format(patient)
