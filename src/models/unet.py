@@ -64,3 +64,15 @@ class Unet(object):
         model.fit(train_data, mask_data, batch_size=1, epochs=epochs, validation_split=0.2,
                   verbose=1, shuffle=True, callbacks=[model_checkpoint])
 
+    def predict(self, data, batch_size=1, verbose=1, weights_path):
+        model = self._get_model()
+        model.load_weights(weights_path)
+        predictions = model.predict(data, batch_size=batch_size, verbose=verbose)
+        return predictions
+
+    def evaluate(self, test_data, test_mask, load_weights, batch_size=1, verbose=1):
+        model = self._get_model()
+        model.load_weights(weights_path)
+        score, acc = model.evaluate(test_data, test_mask, batch_size=batch_size, verbose=verbose)
+        return score, acc
+
