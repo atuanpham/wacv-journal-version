@@ -50,11 +50,34 @@ def process_data(raw_train_data_dir, raw_test_data_dir, processed_train_dir, pro
 @click.option('--image-width', 'image_width', type=click.INT)
 @click.option('--image-height', 'image_height', type=click.INT)
 def train(weights_path,image_width, image_height):
-
     data_utils = DataUtils(_config.PROCESSED_TRAIN_DATA_DIR, _config.PROCESSED_TEST_DATA_DIR)
     data, mask = data_utils.get_train_data()
     unet = Unet(image_width, image_height)
     unet.train(data, mask, weights_path, _config.EPOCHS)
+
+
+@click.command()
+@click.option('--weights-path', 'weights_path', type=click.Path(), default=_config.WEIGHTS_PATH)
+@click.option('--data-path', 'data_path', type=click.Path())
+@click.option('predictions-path', 'predictions_path', type=click.Path())
+def predict(weights_path, data_path, predictions_path):
+    data = np.load(data_path)
+    unet = Unet()
+    predictions = unet.predict(data=data, weights_path=weights_path)
+    np.save(predictions_path, predictions)
+
+
+@click.command()
+@click.option('--weights-path', 'weights_path', type=click.Path(), default=_config.WEIGHTS_PATH)
+def evaluate(weights_path):
+    data_utils = DataUtils(_config.PROCESSED_TRAIN_DATA_DIR, _config.PROCESSED_TEST_DATA_DIR)
+    test_data, test_mask = data_utils.get_test_data()
+
+    unet = Unet()
+    score, acc = unet.evaluate(test_data, test_mask, weights_path)
+
+    click.echo('Test score: {}'.format(score))
+    click.echo('Test accuracy: {}'.format(acc))
 
 
 # Add commands

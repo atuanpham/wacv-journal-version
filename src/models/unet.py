@@ -70,7 +70,7 @@ class Unet(object):
         predictions = model.predict(data, batch_size=batch_size, verbose=verbose)
         return predictions
 
-    def evaluate(self, test_data, test_mask, load_weights, batch_size=1, verbose=1):
+    def evaluate(self, test_data, test_mask, weights_path, batch_size=1, verbose=1):
         model = self._get_model()
         model.load_weights(weights_path)
         score, acc = model.evaluate(test_data, test_mask, batch_size=batch_size, verbose=verbose)
