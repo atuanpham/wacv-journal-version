@@ -1,17 +1,22 @@
+from functools import wraps
 from keras.models import Model
 from keras.optimizers import Adam
 from keras.layers import Input, Conv2D, MaxPooling2D, Conv2DTranspose, Dropout, UpSampling2D
 from keras.layers.merge import concatenate, Concatenate
 from keras.callbacks import ModelCheckpoint 
+from ..exceptions import ModelError
 
 
 class Unet(object):
 
-    def __init__(self, input_rows, input_columns):
+    def __init__(self, input_rows, input_columns, weights_path=None):
         self.input_rows = input_rows
         self.input_columns = input_columns
+        self.model = None
+        self.weights_path = weights_path
+        self.weights_loaded = False
 
-    def _get_model(self):
+    def _get_unet_model(self):
         inputs = Input((self.input_rows, self.input_columns, 1))
         conv1 = Conv2D(32, (3, 3), activation='relu', padding='same')(inputs)
         conv1 = Conv2D(32, (3, 3), activation='relu', padding='same')(conv1)
@@ -56,23 +61,43 @@ class Unet(object):
 
         return model
 
-    def train(self, train_data, mask_data, weights_path, epochs=10):
-        model = self._get_model()
-        model_checkpoint = ModelCheckpoint(weights_path, monitor='loss', verbose=1, save_best_only=True)
+    def model_required(self, func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if self.model is None:
+                self.model = self._get_unet_model()
+            return func(*args, **kwargs)
+        return wrapper
 
+    @model_required
+    def weights_required(self, func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if self.weights_path is None:
+                raise ModelError('Weights path is not defined.')
+            if self.weights_loaded == False:
+                self.model.load_weights(self.weights_path)
+                self.weights_loaded = True
+            return func(*args, **kwargs)
+        return wrapper
+
+    @model_required
+    def train(self, train_data, mask_data, epochs=10):
+        if self.weights_path is None:
+            raise ModelError('Weights path is not defined.')
+
+        model_checkpoint = ModelCheckpoint(self.weights_path, monitor='loss', verbose=1, save_best_only=True)
         print('Fitting model...')
-        model.fit(train_data, mask_data, batch_size=1, epochs=epochs, validation_split=0.2,
+        self.model.fit(train_data, mask_data, batch_size=1, epochs=epochs, validation_split=0.2,
                   verbose=1, shuffle=True, callbacks=[model_checkpoint])
 
-    def predict(self, data, batch_size=1, verbose=1, weights_path):
-        model = self._get_model()
-        model.load_weights(weights_path)
-        predictions = model.predict(data, batch_size=batch_size, verbose=verbose)
+    @weights_required
+    def predict(self, data, batch_size=1, verbose=1):
+        predictions = self.model.predict(data, batch_size=batch_size, verbose=verbose)
         return predictions
 
-    def evaluate(self, test_data, test_mask, weights_path, batch_size=1, verbose=1):
-        model = self._get_model()
-        model.load_weights(weights_path)
+    @weights_required
+    def evaluate(self, test_data, test_mask, batch_size=1, verbose=1):
         score, acc = model.evaluate(test_data, test_mask, batch_size=batch_size, verbose=verbose)
         return score, acc
 
