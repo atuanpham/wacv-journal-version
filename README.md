@@ -24,7 +24,7 @@ conda env create -f environment-gpu.yml
 
 ## Activate environment:
 - Environment could be activated by running command `source activate _env-name_`.
-- Environment name is based on which command you use for initiating before (**journal** or **journal-gpu**).
+- Environment name is based on which command you executed for initiating before (**journal** or **journal-gpu**).
 
 ## Usage:
 - Before training model, you need to preprocess data by following command:
