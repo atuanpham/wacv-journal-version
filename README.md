@@ -39,7 +39,7 @@ python main.py train
 python main.py predict --data-path /path/to/data --predictions-path /path/to/prediction/results.npy
 ```
 
-- Run `python main.py evaluate` for print score and accuracy based on test data.
+- Run `python main.py evaluate` to print score and accuracy based on test data.
 
 ## Results
 Weights of the trained-model could be get at: [http://bit.ly/2elpZzL](http://bit.ly/2elpZzL)
