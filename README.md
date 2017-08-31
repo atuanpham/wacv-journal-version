@@ -9,8 +9,8 @@
 - [Data](https://www.nitrc.org/projects/ibsr) used in this project can be downloaded from:
 [https://www.nitrc.org/projects/ibsr](https://www.nitrc.org/projects/ibsr)
 
-- After getting data, You may want to consider splitting it into two parts and put to *data/raw/test* and
-  *data/raw/train* directories respectively.
+- After getting data, You may want to consider splitting it into two parts and put to _data/raw/test_ and
+  _data/raw/train_ directories respectively.
 
 ## Initiate environment:
 - If you would like to use CPU for training model, run command:
@@ -33,7 +33,7 @@ python main.py preprocess
 python main.py train
 ```
 
-- After model training process is completed, make sure that *unet.hdf5* exists in directory *results/weights*. Run below
+- After model training process is completed, make sure that _unet.hdf5_ exists in directory _results/weights_. Run below
   command to predict data:
 ```
 python main.py predict --data-path /path/to/data --predictions-path /path/to/prediction/results.npy
@@ -44,4 +44,4 @@ python main.py predict --data-path /path/to/data --predictions-path /path/to/pre
 ## Results
 Weights of the trained-model could be get at: [http://bit.ly/2elpZzL](http://bit.ly/2elpZzL)
 
-Before predicting image, You must copy *unet.hdf5* to *results/weights* directory.
+Before predicting image, You must copy _unet.hdf5_ to _results/weights_ directory.
