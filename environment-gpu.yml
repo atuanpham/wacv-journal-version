@@ -1,5 +1,8 @@
 name: journal-gpu
+channels:
+    - defaults
 dependencies:
+    - python=3
     - setuptools
     - numpy
     - scipy
