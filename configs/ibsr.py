@@ -12,6 +12,8 @@ class IBSRConfig(BaseConfig):
     PROCESSED_TRAIN_DATA_DIR = os.path.join(BaseConfig.PROCESSED_DATA_DIR, 'train')
     PROCESSED_TEST_DATA_DIR = os.path.join(BaseConfig.PROCESSED_DATA_DIR, 'test')
 
+    IMG_SIZE = 256
+
     # Rules of Nifti files
     POSTFIX_DATA_FILE = '_ana_strip.nii.gz'
     POSTFIX_MASK_DATA_FILE = '_segTRI_fill_ana.nii.gz'

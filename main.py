@@ -7,7 +7,12 @@ from src.data.preprocessor import Preprocessor
 from src.models.unet import Unet
 from src.data.utils import DataUtils
 
+# Use IBSRConfig
+# You can create another config in 'configs' directory and change _config variable
 _config = IBSRConfig
+
+# Model instance used for training, predicting, evaluating
+unet = Unet(_config.IMG_SIZE, _config.IMG_SIZE, _config.WEIGHTS_PATH)
 
 
 @click.group()
@@ -46,35 +51,27 @@ def process_data(raw_train_data_dir, raw_test_data_dir, processed_train_dir, pro
 
 
 @click.command()
-@click.option('--weights-path', 'weights_path', type=click.Path(), default=_config.WEIGHTS_PATH)
-@click.option('--image-width', 'image_width', type=click.INT)
-@click.option('--image-height', 'image_height', type=click.INT)
-def train(weights_path,image_width, image_height):
+def train():
     data_utils = DataUtils(_config.PROCESSED_TRAIN_DATA_DIR, _config.PROCESSED_TEST_DATA_DIR)
     data, mask = data_utils.get_train_data()
-    unet = Unet(image_width, image_height)
-    unet.train(data, mask, weights_path, _config.EPOCHS)
+    unet.train(data, mask, _config.EPOCHS)
 
 
 @click.command()
-@click.option('--weights-path', 'weights_path', type=click.Path(), default=_config.WEIGHTS_PATH)
 @click.option('--data-path', 'data_path', type=click.Path())
 @click.option('--predictions-path', 'predictions_path', type=click.Path())
-def predict(weights_path, data_path, predictions_path):
+def predict(data_path, predictions_path):
     data = np.load(data_path)
-    unet = Unet()
-    predictions = unet.predict(data=data, weights_path=weights_path)
+    predictions = unet.predict(data)
     np.save(predictions_path, predictions)
 
 
 @click.command()
-@click.option('--weights-path', 'weights_path', type=click.Path(), default=_config.WEIGHTS_PATH)
-def evaluate(weights_path):
+def evaluate():
     data_utils = DataUtils(_config.PROCESSED_TRAIN_DATA_DIR, _config.PROCESSED_TEST_DATA_DIR)
     test_data, test_mask = data_utils.get_test_data()
 
-    unet = Unet()
-    score, acc = unet.evaluate(test_data, test_mask, weights_path)
+    score, acc = unet.evaluate(test_data, test_mask)
 
     click.echo('Test score: {}'.format(score))
     click.echo('Test accuracy: {}'.format(acc))
