@@ -22,6 +22,10 @@ conda env create
 conda env create -f environment-gpu.yml
 ```
 
+## Activate environment:
+- Environment could be activated by running command `source activate _env-name_`.
+- Environment name is based on which command you use for initiating before (**journal** or **journal-gpu**).
+
 ## Usage:
 - Before training model, you need to preprocess data by following command:
 ```
@@ -42,6 +46,6 @@ python main.py predict --data-path /path/to/data --predictions-path /path/to/pre
 - Run `python main.py evaluate` to print score and accuracy based on test data.
 
 ## Results
-Weights of the trained-model could be get at: [http://bit.ly/2elpZzL](http://bit.ly/2elpZzL)
+Weights of the trained-model could be get at: [http://bit.ly/2elpZzL](http://bit.ly/2elpZzL).
 
 Before predicting image, You must copy **unet.hdf5** to **results/weights** directory.
