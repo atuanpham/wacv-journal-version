@@ -43,4 +43,5 @@ python main.py predict --data-path /path/to/data --predictions-path /path/to/pre
 
 ## Results
 Weights of the trained-model could be get at: [http://bit.ly/2elpZzL](http://bit.ly/2elpZzL)
+
 Before predicting image, You must copy *unet.hdf5* to *results/weights* directory.
