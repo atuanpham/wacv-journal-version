@@ -59,7 +59,7 @@ def train(weights_path,image_width, image_height):
 @click.command()
 @click.option('--weights-path', 'weights_path', type=click.Path(), default=_config.WEIGHTS_PATH)
 @click.option('--data-path', 'data_path', type=click.Path())
-@click.option('predictions-path', 'predictions_path', type=click.Path())
+@click.option('--predictions-path', 'predictions_path', type=click.Path())
 def predict(weights_path, data_path, predictions_path):
     data = np.load(data_path)
     unet = Unet()
@@ -83,6 +83,8 @@ def evaluate(weights_path):
 # Add commands
 cli.add_command(process_data)
 cli.add_command(train)
+cli.add_command(predict)
+cli.add_command(evaluate)
 
 
 if __name__ == '__main__':
