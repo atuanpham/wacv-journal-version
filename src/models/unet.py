@@ -1,9 +1,9 @@
-from functools import wraps
 from keras.models import Model
 from keras.optimizers import Adam
 from keras.layers import Input, Conv2D, MaxPooling2D, Conv2DTranspose, Dropout, UpSampling2D
 from keras.layers.merge import concatenate, Concatenate
 from keras.callbacks import ModelCheckpoint 
+from .decorators import UnetDecorator
 from ..exceptions import ModelError
 
 
@@ -61,27 +61,7 @@ class Unet(object):
 
         return model
 
-    def model_required(self, func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            if self.model is None:
-                self.model = self._get_unet_model()
-            return func(*args, **kwargs)
-        return wrapper
-
-    @model_required
-    def weights_required(self, func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            if self.weights_path is None:
-                raise ModelError('Weights path is not defined.')
-            if self.weights_loaded == False:
-                self.model.load_weights(self.weights_path)
-                self.weights_loaded = True
-            return func(*args, **kwargs)
-        return wrapper
-
-    @model_required
+    @UnetDecorator.load_model
     def train(self, train_data, mask_data, epochs=10):
         if self.weights_path is None:
             raise ModelError('Weights path is not defined.')
@@ -91,12 +71,14 @@ class Unet(object):
         self.model.fit(train_data, mask_data, batch_size=1, epochs=epochs, validation_split=0.2,
                   verbose=1, shuffle=True, callbacks=[model_checkpoint])
 
-    @weights_required
+    @UnetDecorator.load_model
+    @UnetDecorator.load_weights
     def predict(self, data, batch_size=1, verbose=1):
         predictions = self.model.predict(data, batch_size=batch_size, verbose=verbose)
         return predictions
 
-    @weights_required
+    @UnetDecorator.load_model
+    @UnetDecorator.load_weights
     def evaluate(self, test_data, test_mask, batch_size=1, verbose=1):
         score, acc = model.evaluate(test_data, test_mask, batch_size=batch_size, verbose=verbose)
         return score, acc
