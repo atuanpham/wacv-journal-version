@@ -80,6 +80,6 @@ class Unet(object):
     @UnetDecorator.load_model
     @UnetDecorator.load_weights
     def evaluate(self, test_data, test_mask, batch_size=1, verbose=1):
-        score, acc = model.evaluate(test_data, test_mask, batch_size=batch_size, verbose=verbose)
+        score, acc = self.model.evaluate(test_data, test_mask, batch_size=batch_size, verbose=verbose)
         return score, acc
 
