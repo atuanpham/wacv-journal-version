@@ -1,3 +1,6 @@
+from ..exceptions import ModelError
+
+
 class UnetDecorator(object):
 
     @staticmethod
