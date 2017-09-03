@@ -1,3 +1,4 @@
+import numpy as np
 from keras.models import Model
 from keras.optimizers import Adam
 from keras.layers import Input, Conv2D, MaxPooling2D, Conv2DTranspose, Dropout, UpSampling2D
@@ -8,13 +9,20 @@ from ..exceptions import ModelError
 
 
 class Unet(object):
+    """
+    :type input_rows: int
+    :type input_columns: int
+    :type model: Model
+    :type weights_path: str
+    :type weights_loaded: bool
+    """
 
     def __init__(self, input_rows, input_columns, weights_path=None):
         self.input_rows = input_rows
         self.input_columns = input_columns
         self.model = None
         self.weights_path = weights_path
-        self.weights_loaded = False
+        self.weights_loaded = False  # used for checking whether weights are loaded
 
     def _get_unet_model(self):
         inputs = Input((self.input_rows, self.input_columns, 1))
@@ -63,6 +71,11 @@ class Unet(object):
 
     @UnetDecorator.load_model
     def train(self, train_data, mask_data, epochs=10):
+        """
+        :type train_data: np.ndarray
+        :type mask_data: np.ndarray
+        :type epochs: int
+        """
         if self.weights_path is None:
             raise ModelError('Weights path is not defined.')
 
@@ -73,8 +86,10 @@ class Unet(object):
 
     @UnetDecorator.load_model
     @UnetDecorator.load_weights
-    def predict(self, data, batch_size=1, verbose=1):
+    def predict(self, data, threshold=0.5, batch_size=1, verbose=1):
         predictions = self.model.predict(data, batch_size=batch_size, verbose=verbose)
+        predictions[predictions <= 0.5] = 0
+        predictions[predictions > 0.5] = 1
         return predictions
 
     @UnetDecorator.load_model
