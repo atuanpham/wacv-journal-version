@@ -1,4 +1,3 @@
-import numpy as np
 from keras.models import Model
 from keras.optimizers import Adam
 from keras.layers import Input, Conv2D, MaxPooling2D, Conv2DTranspose, Dropout, UpSampling2D
@@ -72,10 +71,11 @@ class Unet(object):
     @UnetDecorator.load_model
     def train(self, train_data, mask_data, epochs=10):
         """
-        :type train_data: np.ndarray
-        :type mask_data: np.ndarray
+        :type train_data: numpy.ndarray
+        :type mask_data: numpy.ndarray
         :type epochs: int
         """
+
         if self.weights_path is None:
             raise ModelError('Weights path is not defined.')
 
@@ -87,6 +87,15 @@ class Unet(object):
     @UnetDecorator.load_model
     @UnetDecorator.load_weights
     def predict(self, data, threshold=0.5, batch_size=1, verbose=1):
+        """
+        :type data: numpy.ndarray
+        :type threshold: float
+        :type batch_size: int
+        :type verbose: int
+
+        :rtype numpy.ndarray
+        """
+
         predictions = self.model.predict(data, batch_size=batch_size, verbose=verbose)
         predictions[predictions <= threshold] = 0
         predictions[predictions > threshold] = 1
@@ -94,7 +103,36 @@ class Unet(object):
 
     @UnetDecorator.load_model
     @UnetDecorator.load_weights
-    def evaluate(self, test_data, test_mask, batch_size=1, verbose=1):
-        score, acc = self.model.evaluate(test_data, test_mask, batch_size=batch_size, verbose=verbose)
-        return score, acc
+    def evaluate(self, predictions, test_mask, class_index):
+        """
+        :type predictions: numpy.ndarray
+        :type test_mask: numpy.ndarray
+        :type class_index: int
+
+        :rtype float
+        """
+
+        data_f = predictions[:, :, :, class_index].flatten()
+        mask_f = test_mask[:, :, :, class_index].flatten()
+        intersection = np.sum(data_f * mask_f)
+
+        return (2 * intersection) / (np.sum(data_f) + np.sum(mask_f))
+
+    @UnetDecorator.load_model
+    @UnetDecorator.load_weights
+    def evaluate_average(predictions, test_mask):
+        """
+        :type predictions: numpy.ndarray
+        :type test_mask: numpy.ndarray
+
+        :rtype float
+        """
+
+        n_classes = predictions.shape[-1]
+        accuracies = []
+
+        for class_index in range(n_classes):
+            accuracies.append(self.evaluate(predictions, test_mask, class_index))
+
+        return np.mean(accuracies)
 

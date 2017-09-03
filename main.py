@@ -70,11 +70,18 @@ def predict(data_path, predictions_path):
 def evaluate():
     data_utils = DataUtils(_config.PROCESSED_TRAIN_DATA_DIR, _config.PROCESSED_TEST_DATA_DIR)
     test_data, test_mask = data_utils.get_test_data()
+    predictions = unet.predict(test_data)
 
-    score, acc = unet.evaluate(test_data, test_mask)
+    accuracy_csf = unet.evaluate(predictions, test_mask, 0)
+    accuracy_gm = unet.evaluate(predictions, test_mask, 1)
+    accuracy_wm = unet.evaluate(predictions, test_mask, 2)
+    average = unet.evaluate_average(predictions, test_mask)
 
-    click.echo('Test score: {}'.format(score))
-    click.echo('Test accuracy: {}'.format(acc))
+    click.echo('\n')
+    click.echo('Accuracy of CSF: {}'.format(accuracy_csf))
+    click.echo('Accuracy of GM: {}'.format(accuracy_gm))
+    click.echo('Accuracy of WM: {}'.format(accuracy_wm))
+    click.echo('Average: {}'.format(average))
 
 
 # Add commands
