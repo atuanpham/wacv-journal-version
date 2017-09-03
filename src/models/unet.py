@@ -88,8 +88,8 @@ class Unet(object):
     @UnetDecorator.load_weights
     def predict(self, data, threshold=0.5, batch_size=1, verbose=1):
         predictions = self.model.predict(data, batch_size=batch_size, verbose=verbose)
-        predictions[predictions <= 0.5] = 0
-        predictions[predictions > 0.5] = 1
+        predictions[predictions <= threshold] = 0
+        predictions[predictions > threshold] = 1
         return predictions
 
     @UnetDecorator.load_model
