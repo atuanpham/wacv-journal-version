@@ -121,7 +121,7 @@ class Unet(object):
 
     @UnetDecorator.load_model
     @UnetDecorator.load_weights
-    def evaluate_average(predictions, test_mask):
+    def evaluate_average(self, predictions, test_mask):
         """
         :type predictions: numpy.ndarray
         :type test_mask: numpy.ndarray
