@@ -1,3 +1,4 @@
+import numpy as np
 from keras.models import Model
 from keras.optimizers import Adam
 from keras.layers import Input, Conv2D, MaxPooling2D, Conv2DTranspose, Dropout, UpSampling2D
