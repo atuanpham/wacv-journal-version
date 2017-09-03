@@ -36,7 +36,7 @@ class DataUtils(object):
             return (self.train_data, self.train_mask)
 
         for patient in self.train_patients:
-            self._append_train_data(patient)
+            self.__append_train_data(patient)
 
         return (self.train_data, self.train_mask)
 
@@ -46,11 +46,11 @@ class DataUtils(object):
             return (self.test_data, self.test_mask)
 
         for patient in self.test_patients:
-            self._append_test_data(patient)
+            self.__append_test_data(patient)
 
         return (self.test_data, self.test_mask)
 
-    def _append_train_data(self, patient):
+    def __append_train_data(self, patient):
         data_path = os.path.join(self.processed_train_data_dir, patient, '{}{}'.format(patient, self.__data_postfix))
         mask_path = os.path.join(self.processed_train_data_dir, patient, '{}{}'.format(patient, self.__mask_postfix))
 
@@ -67,7 +67,7 @@ class DataUtils(object):
         else:
             self.train_mask = np.append(self.train_mask, mask, axis=0)
 
-    def _append_test_data(self, patient):
+    def __append_test_data(self, patient):
         data_path = os.path.join(self.processed_test_data_dir, patient, '{}{}'.format(patient, self.__data_postfix))
         mask_path = os.path.join(self.processed_test_data_dir, patient, '{}{}'.format(patient, self.__mask_postfix))
 
