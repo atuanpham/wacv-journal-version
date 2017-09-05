@@ -1,4 +1,9 @@
-# wacv-journal-version
+# 3D-Brain Segmentation Using Deep Neural Network and Gaussian Mixture Model
+
+## Abstract:
+Automatic segmentation of major brain tissues from high-resolution magnetic resonance images (MRIs) plays an important role in clinical diagnostics and neuroscience research. In this paper, we present a novel approach to extract brain tissues including gray matter, white matter and cerebrospinal fluid by using Gaussian mixture models (GMMs), Convolution neural networks (CNNs) and Deep neural networks (DNNs). GMMs are applied to classify voxels which have distinct intensity information and are easy to recognize while DNNs and CNNs are treating voxels which are similar in appearance and usually recognized insufficiently by traditional approaches. The empirical results on IBSR 18 dataset show that the proposed method outperforms 13 state-of-the-art algorithms, surpassing all other methods by a significant margin.
+
+- link: [http://ieeexplore.ieee.org/document/7926679](http://ieeexplore.ieee.org/document/7926679/)
 
 ## Requirements:
 - python3
